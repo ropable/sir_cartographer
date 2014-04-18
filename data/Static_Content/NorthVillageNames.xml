@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfC_VillageName xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <C_VillageName>
+    <m_RegionID>213</m_RegionID>
+    <m_Title>Shallow Bullfitch</m_Title>
+    <m_SubTitle>Please Drive Carefully</m_SubTitle>
+  </C_VillageName>
+  <C_VillageName>
+    <m_RegionID>215</m_RegionID>
+    <m_Title>Nimby Dreading</m_Title>
+    <m_SubTitle>Welcomes Careful Ramblers</m_SubTitle>
+  </C_VillageName>
+  <C_VillageName>
+    <m_RegionID>217</m_RegionID>
+    <m_Title>Hedge Knocking</m_Title>
+    <m_SubTitle>in-the-Wold</m_SubTitle>
+  </C_VillageName>
+  <C_VillageName>
+    <m_RegionID>219</m_RegionID>
+    <m_Title>Shallow End</m_Title>
+    <m_SubTitle>No Tourists</m_SubTitle>
+  </C_VillageName>
+</ArrayOfC_VillageName>

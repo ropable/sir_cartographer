@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfC_VillageName xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <C_VillageName>
+    <m_RegionID>415</m_RegionID>
+    <m_Title>Leafy Fitchet</m_Title>
+    <m_SubTitle>Historic Market Town</m_SubTitle>
+  </C_VillageName>
+  <C_VillageName>
+    <m_RegionID>417</m_RegionID>
+    <m_Title>Misty Bunmer</m_Title>
+    <m_SubTitle>No Tourists</m_SubTitle>
+  </C_VillageName>
+</ArrayOfC_VillageName>

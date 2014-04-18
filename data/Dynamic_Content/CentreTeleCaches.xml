@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<C_TeleCacheData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <m_NumCaches>5</m_NumCaches>
+  <m_Locations>
+    <Vector3>
+      <x>525</x>
+      <y>14.6056271</y>
+      <z>525</z>
+    </Vector3>
+    <Vector3>
+      <x>324.667969</x>
+      <y>11.80559</y>
+      <z>210.50856</z>
+    </Vector3>
+    <Vector3>
+      <x>199.873352</x>
+      <y>6.68186855</y>
+      <z>594.3556</z>
+    </Vector3>
+    <Vector3>
+      <x>565.8643</x>
+      <y>9.848362</y>
+      <z>379.3233</z>
+    </Vector3>
+    <Vector3>
+      <x>576.017151</x>
+      <y>9.618317</y>
+      <z>330.759521</z>
+    </Vector3>
+  </m_Locations>
+  <m_WhichPeices>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+  </m_WhichPeices>
+</C_TeleCacheData>
