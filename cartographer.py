@@ -1,5 +1,5 @@
-# Sir, You Are Being Mapped; adapted to 0.6.4839 or whatever it is.
-versionNumber = 'v0.91'
+sirVersion = '0.11.5583'
+#versionNumber = 'v0.91'
 
 # To do:
 # Add toggles for various map display settings
@@ -393,7 +393,7 @@ TEXTOFFSETY = 50
 
 # Create display surface.
 DISPLAYSURF = pygame.display.set_mode((XDISPLAYSIZE,YDISPLAYSIZE))
-pygame.display.set_caption('Sir, You Are Being Mapped '+versionNumber+' - Mapping the '+islandName+' island.')
+#pygame.display.set_caption('Sir, You Are Being Mapped '+versionNumber+' - Mapping the '+islandName+' island.')
 
 
 # Draw the Voronoi cell polygons.
