@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import os
+from PIL import Image, ImageDraw
 from xml.etree import ElementTree
 
 sirVersion = '0.11.5583'  # Tested against this game version.
@@ -8,12 +9,13 @@ sirVersion = '0.11.5583'  # Tested against this game version.
 def parse_islandgraph():
     # Get the filename for the graph file and open it.
     abspath = os.path.dirname(os.path.abspath(__file__))
+    # TODO: accept user input to the Save path.
     graphpath = os.path.join(abspath, 'data', 'Static_Content', 'CentreGraph.xml')
     return ElementTree.parse(graphpath)
 
 
 def point_list(tree):
-    # Look through the top level for the point list entry,
+    # Look through the tree for the point list entry,
     # then look through that for C_Point entries.
     cpoints = list(tree.find('m_PointList').iter('C_Point'))
 
@@ -27,8 +29,8 @@ def point_list(tree):
 
 
 def triangle_list(tree):
-    # Look through the top level for the triangle list entry,
-    # then look through that for C_Triangle entries
+    # Look through the tree for the triangle list entry,
+    # then look through that for C_Triangle entries.
     ctriangles = list(tree.find("m_TriangleList").iter("C_Triangle"))
 
     # Go through all the C_Triangles getting their point reference values.
@@ -40,24 +42,11 @@ def triangle_list(tree):
     return triangles
 
 
-def voronoi_corner_list(tree):
-    # The next one is the Voronoi Corner List
-    # Look through for C_Points
-    vcorners = list(tree.find("m_VoronoiCornerList").iter("C_Point"))
-
-    # Go through all the C_Points getting their X,Y values
-    vor_corners = []
-    for itr, cnr in enumerate(vcorners):
-        vor_corners.append((itr, float(cnr.find('X').text), float(cnr.find('Y').text)))
-
-    return vor_corners
-
-
 def voronoi_edge_list(tree):
-    # Then the Voronoi Edge List
-    # Look through for C_Edges
+    # Look through the tree for the Voronoi edge list entry,
+    # then look through that for C_Edge data.
     vedges = list(tree.find("m_VoronoiEdgeList").iter("C_Edge"))
-    # Go through the C_Edges getting their point reference values
+    # Gather the p1 & p2 values for each C_Edges entry.
     vor_edges = []
     for itr, edge in enumerate(vedges):
         vor_edges.append((itr, int(edge.find('p1').text), int(edge.find('p2').text)))
@@ -65,19 +54,29 @@ def voronoi_edge_list(tree):
     return vor_edges
 
 
+def voronoi_corner_list(tree):
+    # Look through the tree for the Voronoi corner list entry,
+    # then look through that for C_Points data.
+    vcorners = list(tree.find("m_VoronoiCornerList").iter("C_Point"))
+
+    # Gather the X, Y value for each C_Points entry.
+    vor_corners = []
+    for itr, cnr in enumerate(vcorners):
+        vor_corners.append((itr, float(cnr.find('X').text), float(cnr.find('Y').text)))
+
+    return vor_corners
+
+
 def voronoi_cell_list(tree):
-    # Then the Voronoi Cell List
-    # Each cell refers some Delaunay stuff - is that the main triangle list?
-    # Then it refers to the Voronoi corners and Voronoi edges from above.
-    # Look through for Voronoi Cells
+    # Look through the tree for the Voronoi cell list entry,
+    # then look through that for C_VoronoiCell data.
     vcells = list(tree.find("m_C_VoronoiCellList").iter("C_VoronoiCell"))
     # Look through for the Corner Indexes.
     vcell_corners = []
     for itr, cell in enumerate(vcells):
-        # Look for the corner indices
+        # Look for the corner indices and cell type.
         cell_corner_idx = list(cell.find("m_CornerIndexes").iter("int"))
         ints = [int(i.text) for i in cell_corner_idx]
-        # Look for the type
         celltype = int(cell.find("m_Type").text)
         vcell_corners.append((itr, ints, celltype))
 
@@ -146,3 +145,29 @@ def get_polygons(tree):
             polygons.append([itr, coords, (255, 0, 0), cell_type])
 
     return polygons
+
+
+def render_island(tree):
+    bg = Image.new('RGBA', (1024, 1024), (255, 0, 0, 0))
+    polygons = get_polygons(tree)
+    # TODO: allow different sizes of rendering. For now just render an island
+    # 1024x1024.
+    xscale = 1.0
+    yscale = 1.0
+    ydisplaysize = 1024
+    # Draw the Voronoi cell polygons.
+    for p in polygons:
+        # Take the list of coords and modify them in-place.
+        coords = p[1]
+        for idx, coord in enumerate(coords):
+            coord[0] = int(coord[0] * xscale)
+            coord[1] = ydisplaysize - int(coord[1] * yscale)
+            coords[idx] = tuple(coord)  # Cast the list as a 2-tuple.
+
+        poly = Image.new('RGBA', (1024, 1024))
+        poly_draw = ImageDraw.Draw(poly)
+        poly_draw.polygon(coords, fill=p[2])#, outline=(255, 255, 255, 255))
+        bg.paste(poly, mask=poly)
+
+    bg.save('test.png')
+    return True
