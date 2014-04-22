@@ -28,10 +28,13 @@ Notes
 * Install to a virtualenv (assuming virtualenvwrapper is present and
   configured): `mkvirtualenv -r requirements.txt sir_cartographer`
 
-Acknowledgement
+Acknowledgements
 =====
 
 This script is based largely off the [Sir, You Are Being Mapped](http://www.big-robot.com/forum/showthread.php?1186-Sir-You-Are-Being-Modded&p=8048&viewfull=1#post8048)
 mod, itself the work of [Kay Johnston](http://www.big-robot.com/forum/member.php?828-Kay-Johnston).
 All credit to them for deciphering the game XML and scripting the
 output of a useful island map to admire or cheat with.
+
+The map background was obtained from [Subtle
+Patterns](http://subtlepatterns.com/old-map/).

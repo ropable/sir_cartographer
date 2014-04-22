@@ -1,70 +1,8 @@
 #!/usr/bin/env python
-import os
 from PIL import Image, ImageDraw
-from xml.etree import ElementTree
+from utils import voronoi_corner_list#, voronoi_cell_list
 
-sirVersion = '0.11.5583'  # Tested against this game version.
-
-
-def parse_islandgraph():
-    # Get the filename for the graph file and open it.
-    abspath = os.path.dirname(os.path.abspath(__file__))
-    # TODO: accept user input to the Save path.
-    graphpath = os.path.join(abspath, 'data', 'Static_Content', 'CentreGraph.xml')
-    return ElementTree.parse(graphpath)
-
-
-def point_list(tree):
-    # Look through the tree for the point list entry,
-    # then look through that for C_Point entries.
-    cpoints = list(tree.find('m_PointList').iter('C_Point'))
-
-    # Determine x & y values for each C_Point entry.
-    # Return a list of (iteration, x, y) tuples.
-    points = []
-    for itr, cp in enumerate(cpoints):
-        points.append((itr, float(cp.find('X').text), float(cp.find('Y').text)))
-
-    return points
-
-
-def triangle_list(tree):
-    # Look through the tree for the triangle list entry,
-    # then look through that for C_Triangle entries.
-    ctriangles = list(tree.find("m_TriangleList").iter("C_Triangle"))
-
-    # Go through all the C_Triangles getting their point reference values.
-    triangles = []
-    for itr, ct in enumerate(ctriangles):
-        triangles.append((
-            itr, int(ct.find('p1').text), int(ct.find('p2').text), int(ct.find('p3').text)))
-
-    return triangles
-
-
-def voronoi_edge_list(tree):
-    # Look through the tree for the Voronoi edge list entry,
-    # then look through that for C_Edge data.
-    vedges = list(tree.find("m_VoronoiEdgeList").iter("C_Edge"))
-    # Gather the p1 & p2 values for each C_Edges entry.
-    vor_edges = []
-    for itr, edge in enumerate(vedges):
-        vor_edges.append((itr, int(edge.find('p1').text), int(edge.find('p2').text)))
-
-    return vor_edges
-
-
-def voronoi_corner_list(tree):
-    # Look through the tree for the Voronoi corner list entry,
-    # then look through that for C_Points data.
-    vcorners = list(tree.find("m_VoronoiCornerList").iter("C_Point"))
-
-    # Gather the X, Y value for each C_Points entry.
-    vor_corners = []
-    for itr, cnr in enumerate(vcorners):
-        vor_corners.append((itr, float(cnr.find('X').text), float(cnr.find('Y').text)))
-
-    return vor_corners
+GAMEVERSION = '0.11.5583'  # Tested against this version of the game.
 
 
 def voronoi_cell_list(tree):
@@ -86,42 +24,42 @@ def voronoi_cell_list(tree):
 # Define a dict of cell types, plus a tuple of RGB colours to use for each
 # cell type.
 CELLTYPE = {
-    1: (0, 0, 255),  # Sea
+    1: [0, 0, 255],  # Sea
     # 2
-    3: (0, 200, 0),  # Copse
+    3: [0, 200, 0],  # Copse
     # 4
-    5: (180, 180, 100),  # Shore
-    6: (210, 210, 100),  # HedgedField
-    7: (160, 160, 70),  # SoloBuilding
-    8: (128, 128, 128),  # Village
-    9: (96, 96, 96),  # Road
+    5: [180, 180, 100],  # Shore
+    6: [210, 210, 100],  # HedgedField
+    7: [160, 160, 70],  # SoloBuilding
+    8: [128, 128, 128],  # Village
+    9: [96, 96, 96],  # Road
     # 10
-    11: (0, 150, 0),  # Forest
-    12: (230, 230, 120),  # BaseCamp
-    13: (210, 210, 100),  # FencedField
-    14: (80, 80, 80),  # Church
-    15: (200, 200, 120),  # Boat
-    16: (200, 200, 120),  # Boat
-    17: (200, 200, 120),  # Boat
-    18: (200, 200, 120),  # Boat
-    19: (128, 128, 128),  # VillageRuined
-    20: (0, 150, 0),  # PineForest
-    21: (80, 180, 80),  # DecidForest
-    22: (20, 40, 150),  # Pool
-    23: (70, 70, 70),  # HillCliff
-    24: (140, 140, 80),  # Rocks
-    25: (0, 130, 0),  # ForestCamp
-    26: (20, 40, 160),  # Canal
-    27: (40, 80, 200),  # PostField
+    11: [0, 150, 0],  # Forest
+    12: [230, 230, 120],  # BaseCamp
+    13: [210, 210, 100],  # FencedField
+    14: [80, 80, 80],  # Church
+    15: [200, 200, 120],  # Boat
+    16: [200, 200, 120],  # Boat
+    17: [200, 200, 120],  # Boat
+    18: [200, 200, 120],  # Boat
+    19: [128, 128, 128],  # VillageRuined
+    20: [0, 150, 0],  # PineForest
+    21: [80, 180, 80],  # DecidForest
+    22: [20, 40, 150],  # Pool
+    23: [70, 70, 70],  # HillCliff
+    24: [140, 140, 80],  # Rocks
+    25: [0, 130, 0],  # ForestCamp
+    26: [20, 40, 160],  # Canal
+    27: [40, 80, 200],  # PostField
     # 28
-    29: (64, 64, 64),  # VillageIndustrial
-    30: (210, 210, 210),  # WalledHayBale
-    31: (180, 180, 70),  # SoloSmallBuilding
-    32: (10, 20, 120),  # IndCanal
-    33: (72, 72, 72),  # IndCanalSide
-    34: (120, 96, 96),  # JunkPile
-    35: (100, 76, 76),  # SlagHeap
-    36: (200, 200, 80),  # Pylon
+    29: [64, 64, 64],  # VillageIndustrial
+    30: [210, 210, 210],  # WalledHayBale
+    31: [180, 180, 70],  # SoloSmallBuilding
+    32: [10, 20, 120],  # IndCanal
+    33: [72, 72, 72],  # IndCanalSide
+    34: [120, 96, 96],  # JunkPile
+    35: [100, 76, 76],  # SlagHeap
+    36: [200, 200, 80],  # Pylon
 }
 
 
@@ -147,26 +85,41 @@ def get_polygons(tree):
     return polygons
 
 
-def render_island(tree):
-    bg = Image.new('RGBA', (1024, 1024), (255, 0, 0, 0))
-    polygons = get_polygons(tree)
+def island_size(xscale=1.0, yscale=1.0):
+    # Return a tuple of (x, y) pixel size for each island.
     # TODO: allow different sizes of rendering. For now just render an island
     # 1024x1024.
-    xscale = 1.0
-    yscale = 1.0
-    ydisplaysize = 1024
+    return (int(1024*xscale), int(1024*yscale))
+
+
+def render_island(tree):
+    # Obtain polygons, except for sea or shore type.
+    # Don't draw polygon boundaries in the sea or shore.
+    polygons = [p for p in get_polygons(tree) if p[3] not in [1, 5]]
+    size = island_size()
+    bg = Image.new('RGBA', size, (255, 0, 0, 0))
+    # Draw the map background.
+    tile = Image.open('assets/old_map.png')
+    tilesize = tile.size
+    tilex = int(size[0] / tilesize[0])
+    tiley = int(size[1] / tilesize[1])
+    for i in range(tilex):
+        for j in range(tiley):
+            bg.paste(tile, (i*tilesize[0], j*tilesize[1]))
+
     # Draw the Voronoi cell polygons.
     for p in polygons:
         # Take the list of coords and modify them in-place.
         coords = p[1]
         for idx, coord in enumerate(coords):
-            coord[0] = int(coord[0] * xscale)
-            coord[1] = ydisplaysize - int(coord[1] * yscale)
+            coord[0] = int(coord[0])
+            coord[1] = size[1] - int(coord[1])
             coords[idx] = tuple(coord)  # Cast the list as a 2-tuple.
 
-        poly = Image.new('RGBA', (1024, 1024))
+        poly = Image.new('RGBA', size)
         poly_draw = ImageDraw.Draw(poly)
-        poly_draw.polygon(coords, fill=p[2])#, outline=(255, 255, 255, 255))
+        #poly_draw.polygon(coords, fill=None, outline=(0, 0, 0, 255))  # Black outline, no fill.
+        poly_draw.polygon(coords, fill=tuple(p[2] + [255]))
         bg.paste(poly, mask=poly)
 
     bg.save('test.png')
